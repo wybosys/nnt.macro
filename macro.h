@@ -9,6 +9,9 @@
 #define NNT_END }
 #define USE_NNT using namespace NNT_NS;
 
+#define NNT_BEGIN_NS(ns) NNT_BEGIN namespace ns {
+#define NNT_END_NS() } NNT_END
+
 #define NNT_FRIEND(cls) friend class cls;
 #define NNT_NOCOPY(cls) \
 private:                 \
