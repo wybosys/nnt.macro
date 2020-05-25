@@ -1,6 +1,14 @@
 #ifndef __NNT_MACROXX_H_INCLUDED
 #define __NNT_MACROXX_H_INCLUDED
 
+#ifndef NNT_NS
+#define NNT_NS nnt
+#endif
+
+#define NNT_BEGIN namespace NNT_NS {
+#define NNT_END }
+#define USE_NNT using namespace NNT_NS;
+
 #define NNT_FRIEND(cls) friend class cls;
 #define NNT_NOCOPY(cls) \
 private:                 \
@@ -47,13 +55,14 @@ public:                          \
 
 #define NNT_AUTOGUARD(obj, ...) ::std::lock_guard<::std::mutex> _NNT_COMBINE(__auto_guard_, __LINE__)(obj);
 
-namespace nnt
+NNT_BEGIN
+
+template <class T, class TP = typename T::private_class_type>
+static TP* DPtr(T* obj)
 {
-    template <class T, class TP = typename T::private_class_type>
-    static TP* DPtr(T* obj)
-    {
-        return obj->d_ptr;
-    }
+    return obj->d_ptr;
 }
+
+NNT_END
 
 #endif
