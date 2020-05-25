@@ -58,7 +58,55 @@ public:                          \
 
 #define NNT_AUTOGUARD(obj, ...) ::std::lock_guard<::std::mutex> _NNT_COMBINE(__auto_guard_, __LINE__)(obj);
 
+#define NNT_PASS
+
+#ifdef NNT_STATIC
+#define NNT_LIBRARY 1
+#endif
+
+#ifdef NNT_SHARED
+#define NNT_LIBRARY 1
+#endif
+
+#ifndef NNT_LIBRARY
+#define NNT_APP 1
+#endif
+
+#if defined(WIN32) || defined(_WIN32)
+#include <Windows.h>
+#define NNT_WINDOWS
+#ifdef NNT_LIBRARY
+#ifdef NNT_SHARED
+#define NNT_API __declspec(dllexport)
+#endif
+#else
+#define NNT_API __declspec(dllimport)
+#endif
+#else
+#define NNT_UNIXLIKE
+#endif
+
+#ifndef NNT_API
+#define NNT_API NNT_PASS
+#endif
+
+#include <string>
+#include <iostream>
+#include <vector>
+
+#if defined(NNT_WINDOWS) && defined(_UNICODE)
+#include <xstring>
+#endif
+
 NNT_BEGIN
+
+using namespace ::std;
+
+#if defined(NNT_WINDOWS) && defined(_UNICODE)
+typedef wstring system_string;
+#else
+typedef string system_string;
+#endif
 
 template <class T, class TP = typename T::private_class_type>
 static TP* DPtr(T* obj)
