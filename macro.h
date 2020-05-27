@@ -73,6 +73,9 @@ public:                         \
     }                                               \
     bool cls::is_shared() { return nullptr != _##cls##_shared; }
 
+#define NNT_DOT .
+#define NNT_COMMA ,
+
 #define __NNT_RAW(L) L
 #define __NNT_COMBINE(L, R) L##R
 #define _NNT_COMBINE(L, R) __NNT_COMBINE(L, R)
