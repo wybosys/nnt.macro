@@ -80,6 +80,11 @@ public:                         \
 #define NNT_AUTOGUARD(obj, ...) ::std::lock_guard<::std::mutex> _NNT_COMBINE(__auto_guard_, __LINE__)(obj);
 
 #define NNT_PASS
+#define NNT_PASS_EXPRESS(...) \
+    {                         \
+        __VA_ARGS__           \
+    }                         \
+    while (0)
 
 #ifdef NNT_STATIC
 #define NNT_LIBRARY 1
@@ -118,6 +123,20 @@ public:                         \
 
 #if defined(NNT_WINDOWS) && defined(_UNICODE)
 #include <xstring>
+#endif
+
+#if defined(DEBUG) || defined(_DEBUG)
+#define NNT_DEBUG
+#define NNT_DEBUG_SYMBOL(exp) exp
+#define NNT_RELEASE_SYMBOL(exp)
+#define NNT_DEBUG_EXPRESS(exp) NNT_PASS_EXPRESS(exp)
+#define NNT_RELEASE_EXPRESS(exp) NNT_PASS_EXPRESS()
+#else
+#define NNT_RELEASE
+#define NNT_DEBUG_SYMBOL(exp)
+#define NNT_RELEASE_SYMBOL(exp) exp
+#define NNT_DEBUG_EXPRESS(exp) NNT_PASS_EXPRESS()
+#define NNT_RELEASE_EXPRESS(exp) NNT_PASS_EXPRESS(exp)
 #endif
 
 NNT_BEGIN
