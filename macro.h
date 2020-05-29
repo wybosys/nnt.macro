@@ -175,7 +175,7 @@ public:
     virtual ~Object() = default;
 };
 
-typedef Object Interface;
+typedef Object IObject;
 
 NNT_END
 
