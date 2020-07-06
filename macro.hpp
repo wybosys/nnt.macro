@@ -86,10 +86,7 @@ public:                                     \
     bool cls::is_shared() { return nullptr != _##cls##_shared; } \
     void cls::_set_shared(cls *r)                                \
     {                                                            \
-        if (_##cls##_shared)                                     \
-        {                                                        \
-            delete _##cls##_shared;                              \
-        }                                                        \
+        free_shared();                                           \
         _##cls##_shared = r;                                     \
     }
 
@@ -237,7 +234,7 @@ static T const& Nil()
 
 class Object
 {
- public:
+public:
 	virtual ~Object() = default;
 };
 
@@ -245,7 +242,7 @@ typedef Object IObject;
 
 class RefObject : public IObject
 {
- public:
+public:
 	RefObject()
 		: _referencedCount(1)
 	{
@@ -266,14 +263,14 @@ class RefObject : public IObject
 		return false;
 	}
 
- private:
+private:
 	mutable ::std::atomic<size_t> _referencedCount;
 };
 
 template<typename T>
 class shared_ref
 {
- public:
+public:
 	shared_ref()
 		: _ptr(new T())
 	{
@@ -362,7 +359,7 @@ class shared_ref
 		return _ptr;
 	}
 
- private:
+private:
 	T* _ptr;
 
 	shared_ref(::std::nullptr_t)
@@ -384,7 +381,7 @@ class shared_ref
 template<typename TShared>
 class shared_object
 {
- public:
+public:
 	typedef TShared shared_type;
 	typedef typename shared_type::element_type element_type;
 
@@ -436,7 +433,7 @@ class shared_object
 		return _so;
 	}
 
- private:
+private:
 	shared_type _so;
 };
 
