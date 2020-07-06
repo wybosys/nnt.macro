@@ -136,11 +136,16 @@ public:                                     \
 #define NNT_APP 1
 #endif
 
-#if defined(WIN32) || defined(_WIN32)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #include <SDKDDKVer.h>
 #pragma warning(disable : 4251)
-#define WIN32_LEAN_AND_MEAN
 #define NNT_WINDOWS
+#define WIN32_LEAN_AND_MEAN
+#if defined(WIN32) || defined(_WIN32)
+#define NNT_X86
+#else
+#define NNT_X64
+#endif
 #ifdef NNT_LIBRARY
 #ifdef NNT_SHARED
 #define NNT_API __declspec(dllexport)
@@ -148,8 +153,6 @@ public:                                     \
 #elif !defined(NNT_USE_STATIC)
 #define NNT_API __declspec(dllimport)
 #endif
-#else
-#define NNT_UNIXLIKE
 #endif
 
 #ifdef __arm__
@@ -164,6 +167,10 @@ public:                                     \
 #define NNT_X86
 #elif defined(__x86_64__)
 #define NNT_X64
+#endif
+
+#if !defined(NNT_WINDOWS)
+#define NNT_UNIXLIKE
 #endif
 
 #ifndef NNT_API
