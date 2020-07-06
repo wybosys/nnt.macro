@@ -178,7 +178,7 @@ public:                                     \
 #define NNT_X64
 #endif
 
-#if defined(__ANDROID_NDK__)
+#if defined(__ANDROID__)
 #define NNT_ANDROID
 #define NNT_MOBILE
 #endif
